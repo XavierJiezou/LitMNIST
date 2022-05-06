@@ -1,15 +1,49 @@
 [tool.poetry]
 name = "PL-MNIST"
 version = "0.1.0"
-description = ""
+description = "PyTorch Lightning demo on the MNIST dataset"
 authors = ["XavierJiezou <878972272@qq.com>"]
+maintainers = []
+readme = "README.md"
+homepage = "https://github.com/XavierJiezou/PL-MNIST"
+repository = "https://github.com/XavierJiezou/PL-MNIST"
+documentation = "https://github.com/XavierJiezou/PL-MNIST"
+keywords = ["landsat8", "cloud", "mask"]
+classifiers = ["Topic :: Software Development :: Libraries :: Python Modules"]
+packages = [{ include = "PL-MNIST" }]
+include = ["CHANGELOG.md"]
+exclude = []
+
+[tool.poetry.build]
+generate-setup-file = false
 
 [tool.poetry.dependencies]
 python = "^3.7"
+fire = "^0.4.0"
+rich = "^12.3.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^7.1.2"
+autopep8 = "^1.6.0"
+toml = "^0.10.2"
+pytest-cov = "^3.0.0"
+pylint = "^2.13.8"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "tsinghua-pypi"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
+[tool.pytest.ini_options]
+addopts = "-ra -q"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test"
+
+[tool.poetry.scripts]
+plmnist = "plmnist.cli:main"
