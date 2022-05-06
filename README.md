@@ -36,3 +36,4 @@ See [CHANGELOG.md](CHANGELOG.md)
 ## References
 
 - [Python dependency management and packaging made easy.](https://github.com/python-poetry/poetry)
+- [The lightweight PyTorch wrapper for high-performance AI research. Scale your models, not the boilerplate.](https://github.com/PyTorchLightning/pytorch-lightning)
