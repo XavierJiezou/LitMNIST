@@ -1,3 +1,14 @@
+# Log
+lightning_logs/
+
+# Jsub
+jsub/
+run.sh
+gpustat.py
+
+# MNIST
+MNIST/
+
 # Vscode
 .vscode/
 
