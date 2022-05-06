@@ -8,9 +8,9 @@ readme = "README.md"
 homepage = "https://github.com/XavierJiezou/PL-MNIST"
 repository = "https://github.com/XavierJiezou/PL-MNIST"
 documentation = "https://github.com/XavierJiezou/PL-MNIST"
-keywords = ["landsat8", "cloud", "mask"]
+keywords = ["PyTorch", "PyTorch-Lightning", "MNIST"]
 classifiers = ["Topic :: Software Development :: Libraries :: Python Modules"]
-packages = [{ include = "PL-MNIST" }]
+packages = [{ include = "pl_mnist" }]
 include = ["CHANGELOG.md"]
 exclude = []
 
@@ -46,4 +46,4 @@ python_classes = "Test*"
 python_functions = "test"
 
 [tool.poetry.scripts]
-plmnist = "plmnist.cli:main"
+pl-mnist = "pl_mnist.cli:main"
