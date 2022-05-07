@@ -24,7 +24,7 @@ class PlMnist(pl.LightningModule):
 
     def validation_step(self, val_batch, batch_idx):
         x, y = val_batch
-        loss = F.cross_entropy(x.view(x.size(0), -1), y)
+        loss = F.cross_entropy(self.net(x.view(x.size(0), -1)), y)
         self.log('val_loss', loss)
 
     def configure_optimizers(self):
