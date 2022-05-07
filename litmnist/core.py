@@ -70,7 +70,7 @@ class MNISTDataModule(pl.LightningDataModule):
         )
 
 
-class PlMnist(pl.LightningModule):
+class LitMNIST(pl.LightningModule):
     def __init__(self):
         super().__init__()
 
@@ -135,7 +135,7 @@ def run(batch_size: int = 32, num_workers: int = 16) -> None:
         num_workers (int, optional): How many subprocesses to use for data loading. Defaults to 16.
     """
     dm = MNISTDataModule()
-    model = PlMnist()
+    model = LitMNIST()
     trainer = pl.Trainer(
         max_epochs=100,
         gpus=torch.cuda.device_count(),
