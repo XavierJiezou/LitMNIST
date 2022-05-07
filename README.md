@@ -37,3 +37,4 @@ See [CHANGELOG.md](CHANGELOG.md)
 
 - [Python dependency management and packaging made easy.](https://github.com/python-poetry/poetry)
 - [The lightweight PyTorch wrapper for high-performance AI research. Scale your models, not the boilerplate.](https://github.com/PyTorchLightning/pytorch-lightning)
+- [一文详解PyTorch中的交叉熵](https://zhuanlan.zhihu.com/p/369699003)
