@@ -1,8 +1,8 @@
-from pl_mnist import __version__
+from litmnist import __version__
 import fire
 
 
-class PlMnistCli:
+class LitMNISTCLI:
     @staticmethod
     def version() -> str:
         """Return version of the project.
@@ -14,7 +14,7 @@ class PlMnistCli:
 
 
 def main() -> None:
-    fire.Fire(PlMnistCli)
+    fire.Fire(LitMNISTCLI)
 
 
 if __name__ == '__main__':

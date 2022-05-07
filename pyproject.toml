@@ -1,16 +1,16 @@
 [tool.poetry]
-name = "PL-MNIST"
+name = "LitMNIST"
 version = "0.1.0"
 description = "PyTorch Lightning demo on the MNIST dataset"
 authors = ["XavierJiezou <878972272@qq.com>"]
 maintainers = []
 readme = "README.md"
-homepage = "https://github.com/XavierJiezou/PL-MNIST"
-repository = "https://github.com/XavierJiezou/PL-MNIST"
-documentation = "https://github.com/XavierJiezou/PL-MNIST"
+homepage = "https://github.com/XavierJiezou/LitMNIST"
+repository = "https://github.com/XavierJiezou/LitMNIST"
+documentation = "https://github.com/XavierJiezou/LitMNIST"
 keywords = ["PyTorch", "PyTorch-Lightning", "MNIST"]
 classifiers = ["Topic :: Software Development :: Libraries :: Python Modules"]
-packages = [{ include = "pl_mnist" }]
+packages = [{ include = "litmnist" }]
 include = ["CHANGELOG.md"]
 exclude = []
 
@@ -50,4 +50,4 @@ python_classes = "Test*"
 python_functions = "test"
 
 [tool.poetry.scripts]
-pl-mnist = "pl_mnist.cli:main"
+litmnist = "litmnist.cli:main"

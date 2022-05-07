@@ -1,4 +1,4 @@
-from pl_mnist import __version__
+from litmnist import __version__
 
 
 def test_version():
