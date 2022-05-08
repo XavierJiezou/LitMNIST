@@ -5,7 +5,7 @@ import pytorch_lightning as pl
 
 data_config = {
     'data_dir': os.getcwd(),
-    'batch_size': 512,
+    'batch_size': 128,
     'num_workers': 32
 }
 
@@ -35,8 +35,15 @@ train_config = {
             monitor='val_loss',
             mode='min',
             patience=10
+        ),
+        pl.callbacks.ModelCheckpoint(
+            filename='{epoch}-{val_loss:.4f}-{val_acc:.4f}',
+            monitor='val_loss',
+            save_top_k=3,
+            mode='min'
         )
-    ]
+    ],
+    'profiler': None
 }
 
 

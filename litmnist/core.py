@@ -158,6 +158,7 @@ class LitMNIST(pl.LightningModule):
             learning_rate (float): Learning rate of optimizer.
         """
         super().__init__()
+        self.save_hyperparameters()
         if debug:
             self.example_input_array = torch.Tensor(*example_dims)
         else:
@@ -190,7 +191,7 @@ class LitMNIST(pl.LightningModule):
         pred = self.model(x)
         loss = F.cross_entropy(pred, y)
         acc = accuracy(pred.argmax(1), y)
-        self.log_dict({'train_loss': loss, 'train_acc': acc})
+        self.log_dict({'train_loss': loss, 'train_acc': acc}, on_epoch=True)
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -204,7 +205,7 @@ class LitMNIST(pl.LightningModule):
         pred = self.model(x)
         loss = F.cross_entropy(pred, y)
         acc = accuracy(pred.argmax(1), y)
-        self.log_dict({'val_loss': loss, 'val_acc': acc})
+        self.log_dict({'val_loss': loss, 'val_acc': acc}, prog_bar=True)
 
     def test_step(self, batch, batch_idx):
         """Define the test loop
@@ -219,7 +220,20 @@ class LitMNIST(pl.LightningModule):
         acc = accuracy(pred.argmax(1), y)
         self.log_dict({'test_loss': loss, 'test_acc': acc})
 
-    def configure_optimizers(self) ->  torch.optim.Optimizer:
+    def predict_step(self, batch: torch.Tensor, batch_idx: int, dataloader_idx: int = 0) -> torch.Tensor:
+        """Define the predict interface.
+
+        Args:
+            batch (torch.Tensor): Current batch.
+            batch_idx (int): Index of current batch.
+            dataloader_idx (int): Index of the current dataloader. Default to 0.
+
+        Returns:
+            torch.Tensor: Predicted output
+        """
+        return self.model(batch)
+
+    def configure_optimizers(self) -> torch.optim.Optimizer:
         """Define the optimizer.
 
         Args:
