@@ -14,7 +14,6 @@ class MNISTDataModule(pl.LightningDataModule):
     def __init__(
         self,
         data_dir: str,
-        dims: tuple,
         batch_size: int,
         num_workers: int
     ) -> None:
@@ -22,13 +21,11 @@ class MNISTDataModule(pl.LightningDataModule):
 
         Args:
             data_dir (str): Dir to save the dataset.
-            dims (tuple): Dimension of the input image. Format in (channels, width, height).
             batch_size (int): How many samples per batch to load.
             num_workers (int): How many subprocesses to use for data loading.
         """
         super().__init__()
         self.data_dir = data_dir
-        self.dims = dims
         self.batch_size = batch_size
         self.num_workers = num_workers
         self.transform = transforms.Compose([
@@ -235,9 +232,9 @@ def run() -> None:
     """Running.
     """
     dm = MNISTDataModule(**pl_config['data'])
-    pl = LitMNIST(**pl_config['lightning'])
+    lm = LitMNIST(**pl_config['lightning'])
     trainer = pl.Trainer(**pl_config['train'])
-    trainer.fit(pl, dm)
+    trainer.fit(lm, dm)
 
 
 if __name__ == '__main__':
