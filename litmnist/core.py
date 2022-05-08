@@ -235,6 +235,7 @@ def run() -> None:
     lm = LitMNIST(**pl_config['lightning'])
     trainer = pl.Trainer(**pl_config['train'])
     trainer.fit(lm, dm)
+    trainer.test(lm, dm)
 
 
 if __name__ == '__main__':
