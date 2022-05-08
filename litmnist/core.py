@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 import pytorch_lightning as pl
 from torchmetrics.functional import accuracy
-from conf import pl_config
+from litmnist.conf import pl_config
 
 
 class MNISTDataModule(pl.LightningDataModule):

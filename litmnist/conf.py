@@ -7,7 +7,7 @@ data_config = {
     'data_dir': os.getcwd(),
     'dims': (1, 28, 28),
     'batch_size': 100,
-    'num_workders': 16
+    'num_workers': 16
 }
 
 
