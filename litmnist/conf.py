@@ -6,7 +6,6 @@ import pytorch_lightning as pl
 data_config = {
     'data_dir': os.getcwd(),
     'dims': (1, 28, 28),
-    'num_classes': 10,
     'batch_size': 100,
     'num_workders': 16
 }
@@ -16,7 +15,8 @@ model_config = {
     'channels': 1,
     'width': 28,
     'height': 28,
-    'hidden_size': 64
+    'hidden_size': 64,
+    'num_classes': 10
 }
 
 

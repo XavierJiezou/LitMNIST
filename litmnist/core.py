@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 import pytorch_lightning as pl
 from torchmetrics.functional import accuracy
-from config import pl_config
+from conf import pl_config
 
 
 class MNISTDataModule(pl.LightningDataModule):
@@ -15,23 +15,20 @@ class MNISTDataModule(pl.LightningDataModule):
         self,
         data_dir: str,
         dims: tuple,
-        num_classes: int,
         batch_size: int,
-        num_workders: int
+        num_workers: int
     ) -> None:
         """Define a `DataMoudle` for MNIST.
 
         Args:
             data_dir (str): Dir to save the dataset.
             dims (tuple): Dimension of the input image. Format in (channels, width, height).
-            num_classes (int): Number of classes to images.
             batch_size (int): How many samples per batch to load.
             num_workers (int): How many subprocesses to use for data loading.
         """
         super().__init__()
         self.data_dir = data_dir
         self.dims = dims
-        self.num_classes = num_classes
         self.batch_size = batch_size
         self.num_workers = num_workers
         self.transform = transforms.Compose([
@@ -115,7 +112,8 @@ class MNISTModel(nn.Module):
         channels: int,
         width: int,
         height: int,
-        hidden_size: int
+        hidden_size: int,
+        num_classes: int
     ) -> None:
         """Initialization.
 
@@ -124,6 +122,7 @@ class MNISTModel(nn.Module):
             width (int): Width of the image.
             height (int): Height of the image.
             hidden_size (int): Size of the hidden layers.
+            num_classes (int): Number of classes to images.
         """
         super().__init__()
         self.model = nn.Sequential(
@@ -153,13 +152,13 @@ class LitMNIST(pl.LightningModule):
         debug: bool,
         example_dims: tuple,
         learning_rate: float
-    ):
-        """_summary_
+    ) -> None:
+        """Initialization.
 
         Args:
-            debug (bool): If True, 
-            example_dims (tuple): _description_
-            learning_rate (float): _description_
+            debug (bool): If True, display the intermediate input and output sizes of all your layers.
+            example_dims (tuple): Used to create `self.example_input_array`.
+            learning_rate (float): Learning rate of optimizer.
         """
         super().__init__()
         if debug:
@@ -169,10 +168,27 @@ class LitMNIST(pl.LightningModule):
         self.model = MNISTModel(**pl_config['model'])
         self.learning_rate = learning_rate
 
-    def forward(self, x):
+    def forward(self, x) -> torch.Tensor:
+        """Defines the prediction/inference actions.
+
+        Args:
+            x (torch.Tensor): Input.
+
+        Returns:
+            torch.Tensor: Output.
+        """
         return self.model(x)
 
     def training_step(self, batch, batch_idx):
+        """Defines the train loop. It is independent of forward.
+
+        Args:
+            batch (torch.Tensor): Input.
+            batch_idx (int): Index of batch.
+
+        Returns:
+            torch.Tensor: Loss with gradient.
+        """
         x, y = batch
         pred = self.model(x)
         loss = F.cross_entropy(pred, y)
@@ -180,39 +196,48 @@ class LitMNIST(pl.LightningModule):
         self.log_dict({'train_loss': loss, 'train_acc': acc})
         return loss
 
-    def validation_step(self, val_batch, batch_idx):
-        x, y = val_batch
+    def validation_step(self, batch, batch_idx):
+        """Define the validation loop
+
+        Args:
+            batch (torch.Tensor): Input.
+            batch_idx (int): Index of batch.
+        """
+        x, y = batch
         pred = self.model(x)
         loss = F.cross_entropy(pred, y)
         acc = accuracy(pred.argmax(1), y)
         self.log_dict({'val_loss': loss, 'val_acc': acc})
 
-    def test_step(self, test_batch, batch_idx):
-        self.validation_step(test_batch, batch_idx)
+    def test_step(self, batch, batch_idx):
+        """Define the test loop
 
-    def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=self.learning_rate)
+        Args:
+            batch (torch.Tensor): Input.
+            batch_idx (int): Index of batch.
+        """
+        x, y = batch
+        pred = self.model(x)
+        loss = F.cross_entropy(pred, y)
+        acc = accuracy(pred.argmax(1), y)
+        self.log_dict({'test_loss': loss, 'test_acc': acc})
+
+    def configure_optimizers(self) ->  torch.optim.Optimizer:
+        """Define the optimizer.
+
+        Args:
+            torch.optim.Optimizer: Optimizer.
+        """
+        return torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
 
 def run() -> None:
-    """Train the model.
+    """Running.
     """
-    dm = MNISTDataModule()
-    model = LitMNIST()
-    trainer = pl.Trainer(
-        max_epochs=100,
-        gpus=torch.cuda.device_count(),
-        precision=16,
-        callbacks=[
-            pl.callbacks.EarlyStopping(
-                monitor='val_loss',
-                mode='min',
-                patience=10
-            ),
-            pl.callbacks.DeviceStatsMonitor()
-        ],
-    )
-    trainer.fit(PlMnist(), )
+    dm = MNISTDataModule(**pl_config['data'])
+    pl = LitMNIST(**pl_config['lightning'])
+    trainer = pl.Trainer(**pl_config['train'])
+    trainer.fit(pl, dm)
 
 
 if __name__ == '__main__':
