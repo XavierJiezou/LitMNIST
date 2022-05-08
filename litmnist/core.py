@@ -8,6 +8,7 @@ from torchvision import transforms
 import pytorch_lightning as pl
 from torchmetrics.functional import accuracy
 from litmnist.conf import pl_config
+from torchvision.datasets import ImageFolder
 
 
 class MNISTDataModule(pl.LightningDataModule):
@@ -62,7 +63,13 @@ class MNISTDataModule(pl.LightningDataModule):
                 transform=self.transform
             )
         if stage == 'predict' or stage is None:
-            pass
+            self.mnist_predict = ImageFolder(
+                root='predcit',
+                transform=transforms.Compose([
+                    transforms.ToTensor(),
+                    transforms.Resize((28, 28))
+                ])
+            )
 
     def train_dataloader(self) -> DataLoader:
         """For training.
@@ -260,12 +267,13 @@ class LitMNIST(pl.LightningModule):
 def run() -> None:
     """Running.
     """
-    pl.seed_everything(0, workers=True) # For Reproducibility
+    pl.seed_everything(0, workers=True)  # For Reproducibility
     dm = MNISTDataModule(**pl_config['data'])
     lm = LitMNIST(**pl_config['lightning'])
     trainer = pl.Trainer(**pl_config['train'])
     trainer.fit(lm, dm)
     trainer.test(lm, dm)
+    trainer.predict(lm, dm)
 
 
 if __name__ == '__main__':
