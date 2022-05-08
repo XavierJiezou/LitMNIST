@@ -6,7 +6,7 @@ import pytorch_lightning as pl
 data_config = {
     'data_dir': os.getcwd(),
     'batch_size': 128,
-    'num_workers': 32
+    'num_workers': 8
 }
 
 

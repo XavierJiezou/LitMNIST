@@ -7,8 +7,8 @@ from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 import pytorch_lightning as pl
 from torchmetrics.functional import accuracy
-from litmnist.conf import pl_config
 from torchvision.datasets import ImageFolder
+from conf import pl_config
 
 
 class MNISTDataModule(pl.LightningDataModule):
@@ -168,6 +168,7 @@ class MNISTModel(nn.Module):
 class LitMNIST(pl.LightningModule):
     def __init__(
         self,
+        model: nn.Module,
         debug: bool,
         example_dims: tuple,
         learning_rate: float
@@ -175,6 +176,7 @@ class LitMNIST(pl.LightningModule):
         """Initialization.
 
         Args:
+            model (nn.Module): Model defined by PyTorch.
             debug (bool): If True, display the intermediate input and output sizes of all your layers.
             example_dims (tuple): Used to create `self.example_input_array`.
             learning_rate (float): Learning rate of optimizer.
@@ -185,7 +187,7 @@ class LitMNIST(pl.LightningModule):
             self.example_input_array = torch.Tensor(*example_dims)
         else:
             pass
-        self.model = MNISTModel(**pl_config['model'])
+        self.model = model
         self.learning_rate = learning_rate
 
     def forward(self, x) -> torch.Tensor:
@@ -268,8 +270,9 @@ def run() -> None:
     """Running.
     """
     pl.seed_everything(0, workers=True)  # For Reproducibility
+    model = MNISTModel(**pl_config['model'])
     dm = MNISTDataModule(**pl_config['data'])
-    lm = LitMNIST(**pl_config['lightning'])
+    lm = LitMNIST(model, **pl_config['lightning'])
     trainer = pl.Trainer(**pl_config['train'])
     trainer.fit(lm, dm)
     trainer.test(lm, dm)
