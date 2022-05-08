@@ -61,12 +61,14 @@ class MNISTDataModule(pl.LightningDataModule):
                 train=False,
                 transform=self.transform
             )
+        if stage == 'predict' or stage is None:
+            pass
 
     def train_dataloader(self) -> DataLoader:
-        """Implement one or more PyTorch DataLoaders for training.
+        """For training.
 
         Returns:
-            DataLoader: A collection of torch.utils.data.DataLoader specifying training samples.
+            DataLoader: Specify training samples.
         """
         return DataLoader(
             dataset=self.mnist_train,
@@ -77,10 +79,10 @@ class MNISTDataModule(pl.LightningDataModule):
         )
 
     def val_dataloader(self) -> DataLoader:
-        """Implement one or more PyTorch DataLoaders for validation.
+        """For validation.
 
         Returns:
-            DataLoader: A collection of torch.utils.data.DataLoader specifying validation samples.
+            DataLoader: Specify validation samples.
         """
         return DataLoader(
             dataset=self.mnist_val,
@@ -90,13 +92,26 @@ class MNISTDataModule(pl.LightningDataModule):
         )
 
     def test_dataloader(self) -> DataLoader:
-        """Implement one or more PyTorch DataLoaders for testing.
+        """For testing.
 
         Returns:
-            DataLoader: A collection of torch.utils.data.DataLoader specifying testing samples.
+            DataLoader: Specify testing samples.
         """
         return DataLoader(
             dataset=self.mnist_test,
+            batch_size=self.batch_size,
+            num_workers=self.num_workers,
+            persistent_workers=True
+        )
+
+    def predict_dataloader(self) -> DataLoader:
+        """For predicting.
+
+        Returns:
+            DataLoader: Specify predicting samples.
+        """
+        return DataLoader(
+            dataset=self.mnist_predict,
             batch_size=self.batch_size,
             num_workers=self.num_workers,
             persistent_workers=True
@@ -191,7 +206,7 @@ class LitMNIST(pl.LightningModule):
         pred = self.model(x)
         loss = F.cross_entropy(pred, y)
         acc = accuracy(pred.argmax(1), y)
-        self.log_dict({'train_loss': loss, 'train_acc': acc}, on_epoch=True)
+        self.log_dict({'train_loss': loss, 'train_acc': acc})
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -245,6 +260,7 @@ class LitMNIST(pl.LightningModule):
 def run() -> None:
     """Running.
     """
+    pl.seed_everything(0, workers=True) # For Reproducibility
     dm = MNISTDataModule(**pl_config['data'])
     lm = LitMNIST(**pl_config['lightning'])
     trainer = pl.Trainer(**pl_config['train'])
