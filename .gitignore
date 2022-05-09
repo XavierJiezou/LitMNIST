@@ -1,5 +1,5 @@
 # Log
-lightning_logs/
+lightning_logs*/
 
 # Jsub
 jsub/

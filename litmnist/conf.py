@@ -29,13 +29,13 @@ lighting_config = {
 
 
 train_config = {
-    # 'logger': [
-    #     pl.loggers.TensorBoardLogger(os.getcwd()),
-    #     pl.loggers.CometLogger(
-    #         api_key='eaS918AtDsxM1hYVeNOLmzJ4o',
-    #         project_name='mnist'
-    #     )
-    # ],
+    'logger': [
+        pl.loggers.TensorBoardLogger(os.getcwd()),
+        pl.loggers.CometLogger(
+            api_key='eaS918AtDsxM1hYVeNOLmzJ4o',
+            project_name='mnist'
+        )
+    ],
     'fast_dev_run': lighting_config['debug'],
     'max_epochs': 100,
     'gpus': torch.cuda.device_count(),

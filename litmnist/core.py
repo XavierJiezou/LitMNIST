@@ -290,16 +290,7 @@ def run() -> None:
     model = MNISTModel(**pl_config['model'])
     dm = MNISTDataModule(**pl_config['data'])
     lm = LitMNIST(model, **pl_config['lightning'])
-    trainer = pl.Trainer(
-        logger=[
-            pl.loggers.TensorBoardLogger(os.getcwd()),
-            pl.loggers.CometLogger(
-                api_key='eaS918AtDsxM1hYVeNOLmzJ4o',
-                project_name='mnist'
-            )
-        ],
-        **pl_config['train']
-    )
+    trainer = pl.Trainer(**pl_config['train'])
     trainer.fit(lm, dm)
     trainer.test(lm, dm)
     result = trainer.predict(lm, dm)[0]
