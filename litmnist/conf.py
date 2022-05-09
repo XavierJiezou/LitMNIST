@@ -29,6 +29,7 @@ lighting_config = {
 
 
 train_config = {
+    'log_every_n_steps': 0,
     'auto_scale_batch_size': None, # Batch size finder is not yet supported for DDP
     'auto_lr_find': False, # LR finder is not yet supported for DDP and only works with models having a single optimizer.
     'fast_dev_run': lighting_config['debug'], 
