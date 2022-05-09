@@ -5,8 +5,10 @@ import pytorch_lightning as pl
 
 data_config = {
     'data_dir': os.getcwd(),
-    'batch_size': 128,
-    'num_workers': 8
+    'batch_size': 256,
+    'num_workers': 8,
+    'persistent_workers': torch.cuda.device_count() > 0,
+    'pin_memory': torch.cuda.device_count() > 0
 }
 
 
@@ -20,13 +22,16 @@ model_config = {
 
 
 lighting_config = {
-    'debug': True,
-    'example_dims': (100, 1, 28, 28),
+    'debug': False,
+    'example_dims': (100, *list(model_config.values())[:3]),
     'learning_rate': 1e-3
 }
 
 
 train_config = {
+    'auto_scale_batch_size': None, # Batch size finder is not yet supported for DDP
+    'auto_lr_find': False, # LR finder is not yet supported for DDP and only works with models having a single optimizer.
+    'fast_dev_run': lighting_config['debug'], 
     'max_epochs': 100,
     'gpus': torch.cuda.device_count(),
     'precision': 16,

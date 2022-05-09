@@ -16,7 +16,9 @@ class MNISTDataModule(pl.LightningDataModule):
         self,
         data_dir: str,
         batch_size: int,
-        num_workers: int
+        num_workers: int,
+        persistent_workers: bool,
+        pin_memory: bool
     ) -> None:
         """Define a `DataMoudle` for MNIST.
 
@@ -24,11 +26,16 @@ class MNISTDataModule(pl.LightningDataModule):
             data_dir (str): Dir to save the dataset.
             batch_size (int): How many samples per batch to load.
             num_workers (int): How many subprocesses to use for data loading.
+            persistent_workers (bool): If GPU is available, set to True.
+            pin_memory (bool): If GPU is available, set to True.
         """
         super().__init__()
+        self.save_hyperparameters()
         self.data_dir = data_dir
         self.batch_size = batch_size
         self.num_workers = num_workers
+        self.persistent_workers = persistent_workers
+        self.pin_memory = pin_memory
         self.transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.1307,), (0.3081,))
@@ -64,9 +71,10 @@ class MNISTDataModule(pl.LightningDataModule):
             )
         if stage == 'predict' or stage is None:
             self.mnist_predict = ImageFolder(
-                root='predcit',
+                root='predict',
                 transform=transforms.Compose([
                     transforms.ToTensor(),
+                    transforms.Grayscale(1),
                     transforms.Resize((28, 28))
                 ])
             )
@@ -79,10 +87,11 @@ class MNISTDataModule(pl.LightningDataModule):
         """
         return DataLoader(
             dataset=self.mnist_train,
-            batch_size=self.batch_size,
+            batch_size=self.batch_size | self.hparams.batch_size,
             shuffle=True,
             num_workers=self.num_workers,
-            persistent_workers=True
+            persistent_workers=self.persistent_workers,
+            pin_memory=self.pin_memory
         )
 
     def val_dataloader(self) -> DataLoader:
@@ -93,9 +102,10 @@ class MNISTDataModule(pl.LightningDataModule):
         """
         return DataLoader(
             dataset=self.mnist_val,
-            batch_size=self.batch_size,
+            batch_size=self.batch_size | self.hparams.batch_size,
             num_workers=self.num_workers,
-            persistent_workers=True
+            persistent_workers=self.persistent_workers,
+            pin_memory=self.pin_memory
         )
 
     def test_dataloader(self) -> DataLoader:
@@ -106,9 +116,10 @@ class MNISTDataModule(pl.LightningDataModule):
         """
         return DataLoader(
             dataset=self.mnist_test,
-            batch_size=self.batch_size,
+            batch_size=self.batch_size | self.hparams.batch_size,
             num_workers=self.num_workers,
-            persistent_workers=True
+            persistent_workers=self.persistent_workers,
+            pin_memory=self.pin_memory
         )
 
     def predict_dataloader(self) -> DataLoader:
@@ -119,9 +130,10 @@ class MNISTDataModule(pl.LightningDataModule):
         """
         return DataLoader(
             dataset=self.mnist_predict,
-            batch_size=self.batch_size,
+            batch_size=self.batch_size | self.hparams.batch_size,
             num_workers=self.num_workers,
-            persistent_workers=True
+            persistent_workers=self.persistent_workers,
+            pin_memory=self.pin_memory
         )
 
 
@@ -182,7 +194,7 @@ class LitMNIST(pl.LightningModule):
             learning_rate (float): Learning rate of optimizer.
         """
         super().__init__()
-        self.save_hyperparameters()
+        self.save_hyperparameters(ignore=['model'])
         if debug:
             self.example_input_array = torch.Tensor(*example_dims)
         else:
@@ -190,7 +202,7 @@ class LitMNIST(pl.LightningModule):
         self.model = model
         self.learning_rate = learning_rate
 
-    def forward(self, x) -> torch.Tensor:
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Defines the prediction/inference actions.
 
         Args:
@@ -201,7 +213,7 @@ class LitMNIST(pl.LightningModule):
         """
         return self.model(x)
 
-    def training_step(self, batch, batch_idx):
+    def training_step(self, batch: torch.Tensor, batch_idx: int):
         """Defines the train loop. It is independent of forward.
 
         Args:
@@ -215,10 +227,10 @@ class LitMNIST(pl.LightningModule):
         pred = self.model(x)
         loss = F.cross_entropy(pred, y)
         acc = accuracy(pred.argmax(1), y)
-        self.log_dict({'train_loss': loss, 'train_acc': acc})
+        self.log_dict({'train_loss': loss, 'train_acc': acc}, on_step=False, on_epoch=True)
         return loss
 
-    def validation_step(self, batch, batch_idx):
+    def validation_step(self, batch: torch.Tensor, batch_idx: int):
         """Define the validation loop
 
         Args:
@@ -231,7 +243,7 @@ class LitMNIST(pl.LightningModule):
         acc = accuracy(pred.argmax(1), y)
         self.log_dict({'val_loss': loss, 'val_acc': acc}, prog_bar=True)
 
-    def test_step(self, batch, batch_idx):
+    def test_step(self, batch: torch.Tensor, batch_idx: int):
         """Define the test loop
 
         Args:
@@ -255,7 +267,9 @@ class LitMNIST(pl.LightningModule):
         Returns:
             torch.Tensor: Predicted output
         """
-        return self.model(batch)
+        x, y = batch
+        pred = self.model(x).argmax(1)
+        return {'preds': pred, 'label': y}
 
     def configure_optimizers(self) -> torch.optim.Optimizer:
         """Define the optimizer.
@@ -274,9 +288,15 @@ def run() -> None:
     dm = MNISTDataModule(**pl_config['data'])
     lm = LitMNIST(model, **pl_config['lightning'])
     trainer = pl.Trainer(**pl_config['train'])
+    if pl_config['train']['auto_scale_batch_size']:
+        trainer.tune(lm, dm)
+    if pl_config['train']['auto_lr_find']:
+        trainer.tune(lm)
     trainer.fit(lm, dm)
     trainer.test(lm, dm)
-    trainer.predict(lm, dm)
+    result = trainer.predict(lm, dm)[0]
+    for key, value in result.items():
+        print(key, value.tolist())
 
 
 if __name__ == '__main__':
