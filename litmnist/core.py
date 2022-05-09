@@ -87,7 +87,7 @@ class MNISTDataModule(pl.LightningDataModule):
         """
         return DataLoader(
             dataset=self.mnist_train,
-            batch_size=self.batch_size | self.hparams.batch_size,
+            batch_size=self.batch_size,
             shuffle=True,
             num_workers=self.num_workers,
             persistent_workers=self.persistent_workers,
@@ -102,7 +102,7 @@ class MNISTDataModule(pl.LightningDataModule):
         """
         return DataLoader(
             dataset=self.mnist_val,
-            batch_size=self.batch_size | self.hparams.batch_size,
+            batch_size=self.batch_size,
             num_workers=self.num_workers,
             persistent_workers=self.persistent_workers,
             pin_memory=self.pin_memory
@@ -116,7 +116,7 @@ class MNISTDataModule(pl.LightningDataModule):
         """
         return DataLoader(
             dataset=self.mnist_test,
-            batch_size=self.batch_size | self.hparams.batch_size,
+            batch_size=self.batch_size,
             num_workers=self.num_workers,
             persistent_workers=self.persistent_workers,
             pin_memory=self.pin_memory
@@ -130,7 +130,7 @@ class MNISTDataModule(pl.LightningDataModule):
         """
         return DataLoader(
             dataset=self.mnist_predict,
-            batch_size=self.batch_size | self.hparams.batch_size,
+            batch_size=self.batch_size,
             num_workers=self.num_workers,
             persistent_workers=self.persistent_workers,
             pin_memory=self.pin_memory
@@ -227,8 +227,8 @@ class LitMNIST(pl.LightningModule):
         pred = self.model(x)
         loss = F.cross_entropy(pred, y)
         acc = accuracy(pred.argmax(1), y)
-        self.log_dict({'train_loss': loss, 'train_acc': acc},
-                      on_step=False, on_epoch=True)
+        metrics = {'train_loss': loss, 'train_acc': acc}
+        self.log_dict(metrics)
         return loss
 
     def validation_step(self, batch: torch.Tensor, batch_idx: int):
@@ -242,7 +242,8 @@ class LitMNIST(pl.LightningModule):
         pred = self.model(x)
         loss = F.cross_entropy(pred, y)
         acc = accuracy(pred.argmax(1), y)
-        self.log_dict({'val_loss': loss, 'val_acc': acc}, prog_bar=True)
+        metrics = {'val_loss': loss, 'val_acc': acc}
+        self.log_dict(metrics, prog_bar=True)
 
     def test_step(self, batch: torch.Tensor, batch_idx: int):
         """Define the test loop
@@ -255,7 +256,8 @@ class LitMNIST(pl.LightningModule):
         pred = self.model(x)
         loss = F.cross_entropy(pred, y)
         acc = accuracy(pred.argmax(1), y)
-        self.log_dict({'test_loss': loss, 'test_acc': acc})
+        metrics = {'test_loss': loss, 'test_acc': acc}
+        self.log_dict(metrics)
 
     def predict_step(self, batch: torch.Tensor, batch_idx: int, dataloader_idx: int = 0) -> torch.Tensor:
         """Define the predict interface.
@@ -270,7 +272,7 @@ class LitMNIST(pl.LightningModule):
         """
         x, y = batch
         pred = self.model(x).argmax(1)
-        return {'preds': pred, 'label': y}
+        return {'label': y, 'preds': pred}
 
     def configure_optimizers(self) -> torch.optim.Optimizer:
         """Define the optimizer.
@@ -288,11 +290,16 @@ def run() -> None:
     model = MNISTModel(**pl_config['model'])
     dm = MNISTDataModule(**pl_config['data'])
     lm = LitMNIST(model, **pl_config['lightning'])
-    trainer = pl.Trainer(**pl_config['train'])
-    if pl_config['train']['auto_scale_batch_size']:
-        trainer.tune(lm, dm)
-    if pl_config['train']['auto_lr_find']:
-        trainer.tune(lm)
+    trainer = pl.Trainer(
+        logger=[
+            pl.loggers.TensorBoardLogger(os.getcwd()),
+            pl.loggers.CometLogger(
+                api_key='eaS918AtDsxM1hYVeNOLmzJ4o',
+                project_name='mnist'
+            )
+        ],
+        **pl_config['train']
+    )
     trainer.fit(lm, dm)
     trainer.test(lm, dm)
     result = trainer.predict(lm, dm)[0]
