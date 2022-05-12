@@ -228,7 +228,7 @@ class LitMNIST(pl.LightningModule):
         loss = F.cross_entropy(pred, y)
         acc = accuracy(pred.argmax(1), y)
         metrics = {'train_loss': loss, 'train_acc': acc}
-        self.log_dict(metrics)
+        self.log_dict(metrics, on_epoch=True)
         return loss
 
     def validation_step(self, batch: torch.Tensor, batch_idx: int):
