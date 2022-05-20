@@ -1,7 +1,7 @@
 [flake8]
 min_python_version = 3.7.0
 format = pylint
-max-line-length = 88
+max-line-length = 112
 ban-relative-imports = true
 # flake8-use-fstring: https://github.com/MichaelKim0407/flake8-use-fstring#--percent-greedy-and---format-greedy
 format-greedy = 1
@@ -12,8 +12,10 @@ eradicate-whitelist-extend = ^-.*;
 extend-ignore =
     # TC002: Move third-party import 'xxx' into a type-checking block
     TC002,
-    # INP001: File is part of an implicit namespace package.
+    # INP001: File is part of an implicit namespace package
     INP001
+    # ANN101: Missing type annotation for self in method
+    ANN101
 
 per-file-ignores =
     # F401: Module imported by unused (non-implicit modules)
