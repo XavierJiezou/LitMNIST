@@ -11,8 +11,8 @@ hydra-optuna-sweeper>=1.1.0
 
 # --------- loggers --------- #
 # wandb
-# neptune-client
 # mlflow
+# neptune-client
 # comet-ml
 # tensorboard
 
