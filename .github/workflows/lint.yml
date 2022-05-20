@@ -1,4 +1,4 @@
-name: Linting
+name: Lint
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   pre-commit:
-    name: Linting
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
