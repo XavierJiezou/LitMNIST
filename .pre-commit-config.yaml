@@ -58,7 +58,7 @@ repos:
       - id: isort
         name: "isort (python)"
         types: [python]
-        args: [--add-import, from __future__ import annotations]
+        args: []
         # exclude: |
         #   (?x)(
         #      ^(install|get)-poetry.py$

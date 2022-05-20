@@ -3,7 +3,6 @@ https://pytorch-lightning.readthedocs.io/en/latest/cli/lightning_cli_intermediat
 https://pytorch-lightning.readthedocs.io/en/latest/cli/lightning_cli_intermediate_2.html
 """
 
-from __future__ import annotations
 
 import fire
 
