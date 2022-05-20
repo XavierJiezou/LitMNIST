@@ -1,4 +1,5 @@
 import os
+from typing import Any
 
 import torch
 from pytorch_lightning import LightningDataModule
@@ -44,9 +45,11 @@ class MNISTDataModule(LightningDataModule):
         MNIST(self.hparams.data_dir, train=True, download=_download)
         MNIST(self.hparams.data_dir, train=False, download=_download)
 
-    def setup(self, stage: str | None = None) -> None:
+    def setup(self, stage: Any = None) -> None:
         if stage in ("fit", "test", None):
-            trainset = MNIST(root=self.data_dir, train=True, transform=self.transform)
+            trainset = MNIST(
+                root=self.hparams.data_dir, train=True, transform=self.transform
+            )
             testset = MNIST(
                 root=self.hparams.data_dir, train=False, transform=self.transform
             )

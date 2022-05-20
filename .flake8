@@ -16,6 +16,8 @@ extend-ignore =
     INP001
     # ANN101: Missing type annotation for self in method
     ANN101
+    # E402: module level import not at top of file
+    E402
 
 per-file-ignores =
     # F401: Module imported by unused (non-implicit modules)

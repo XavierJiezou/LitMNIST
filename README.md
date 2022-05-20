@@ -1,6 +1,6 @@
 <div align="center">
 
-[![logo](https://raw.githubusercontent.com/XavierJiezou/LitMNIST/main/images/favicon_256x256.svg)](https://pixelied.com/editor/design/6282f5970515730397249959)
+[![logo](https://raw.githubusercontent.com/XavierJiezou/LitMNIST/main/images/logo.png)](https://pixelied.com/editor/design/6282f5970515730397249959)
 
 # LitMNIST
 
@@ -97,7 +97,7 @@ Love the project? Please consider [donating](https://paypal.me/xavierjiezou?coun
 
 ## Demo
 
-![demo](https://cdn.jsdelivr.net/gh/XavierJiezou/LitMNIST@main/images/favicon_256x256.svg)
+![demo](https://cdn.jsdelivr.net/gh/XavierJiezou/LitMNIST@main/images/logo.png)
 
 ## Features
 
