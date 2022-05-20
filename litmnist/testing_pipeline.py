@@ -2,16 +2,14 @@ import os
 
 import hydra
 from omegaconf import DictConfig
-
-from litmnist import utils
-
-from pytorch_lightning import (  # isort:skip
+from pytorch_lightning import (
     LightningDataModule,
     LightningModule,
     Trainer,
     seed_everything,
 )
 
+from litmnist import utils
 
 # Get logger
 log = utils.get_logger(__name__)
