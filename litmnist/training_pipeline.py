@@ -44,8 +44,8 @@ def train(config: DictConfig) -> float:
     datamodule: LightningDataModule = hydra.utils.instantiate(config.datamodule)
 
     # Init lightning model
-    log.info(f"Instantiating model <{config.model._target_}>")
-    model: LightningModule = hydra.utils.instantiate(config.model)
+    log.info(f"Instantiating litmodule <{config.litmodule._target_}>")
+    litmodule: LightningModule = hydra.utils.instantiate(config.litmodule)
 
     # Init lightning callbacks
     callbacks: list[Callback] = []
@@ -73,7 +73,7 @@ def train(config: DictConfig) -> float:
     log.info("Logging hyperparameters!")
     utils.log_hyperparameters(
         config=config,
-        model=model,
+        litmodule=litmodule,
         datamodule=datamodule,
         trainer=trainer,
         callbacks=callbacks,
@@ -83,7 +83,7 @@ def train(config: DictConfig) -> float:
     # Train the model
     if config.get("train"):
         log.info("Starting training!")
-        trainer.fit(model=model, datamodule=datamodule)
+        trainer.fit(model=litmodule, datamodule=datamodule)
 
     # Get metric score for hyperparameter optimization
     optimized_metric = config.get("optimized_metric")
@@ -100,13 +100,13 @@ def train(config: DictConfig) -> float:
         if not config.get("train") or config.trainer.get("fast_dev_run"):
             ckpt_path = None
         log.info("Starting testing!")
-        trainer.test(model=model, datamodule=datamodule, ckpt_path=ckpt_path)
+        trainer.test(model=litmodule, datamodule=datamodule, ckpt_path=ckpt_path)
 
     # Make sure everything closed properly
     log.info("Finalizing!")
     utils.finish(
         config=config,
-        model=model,
+        litmodule=litmodule,
         datamodule=datamodule,
         trainer=trainer,
         callbacks=callbacks,

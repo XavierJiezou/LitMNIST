@@ -19,7 +19,6 @@ def main(config: DictConfig) -> None:
     utils.extras(config)
 
     # Train model
-    return
     return train(config)
 
 
