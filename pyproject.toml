@@ -58,6 +58,7 @@ python_functions = "test"
 [tool.isort]
 profile = "black"
 multi_line_output = 3
+filter_files = true
 
 [tool.poetry.scripts]
 litmnist = "litmnist.cli:main"
