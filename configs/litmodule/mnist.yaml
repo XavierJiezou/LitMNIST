@@ -1,0 +1,9 @@
+_target_: litmnist.litmodules.MNISTLitModule
+defaults:
+  - /model: simple_densenet.yaml
+  - _self_
+model:
+  hidden_size: 256
+  hidden_layers: 3
+lr: 0.001
+weight_decay: 0.0005

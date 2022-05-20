@@ -1,0 +1,11 @@
+# https://neptune.ai
+
+neptune:
+  _target_: pytorch_lightning.loggers.neptune.NeptuneLogger
+  api_key: ${oc.env:NEPTUNE_API_KEY} # api key is loaded from environment variable
+  project_name: "mnist"
+  close_after_fit: True
+  offline_mode: False
+  experiment_name: ${name}
+  experiment_id: null
+  prefix: ""

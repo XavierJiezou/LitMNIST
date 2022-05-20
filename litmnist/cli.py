@@ -3,15 +3,16 @@ https://pytorch-lightning.readthedocs.io/en/latest/cli/lightning_cli_intermediat
 https://pytorch-lightning.readthedocs.io/en/latest/cli/lightning_cli_intermediate_2.html
 """
 
-from litmnist import __version__
-from litmnist.core import MNISTDataModule, LitMNIST
-from pytorch_lightning.utilities.cli import LightningCLI
+from __future__ import annotations
+
 import fire
 
+from litmnist import __version__
 
-class LitMNISTCLI:
-    @staticmethod
-    def version() -> str:
+
+class LitMNISTCli:
+    @property
+    def version(self) -> str:
         """Return version of the project.
 
         Returns:
@@ -21,9 +22,8 @@ class LitMNISTCLI:
 
 
 def main() -> None:
-    fire.Fire(LitMNISTCLI)
-    # LightningCLI(LitMNIST, MNISTDataModule)
+    fire.Fire(LitMNISTCli)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

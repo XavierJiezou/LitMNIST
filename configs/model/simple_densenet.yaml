@@ -1,0 +1,7 @@
+_target_: litmnist.models.SimpleDenseNet
+channels: 1
+width: 28
+height: 28
+hidden_size: 256
+hidden_layers: 3
+num_classes: 10
