@@ -7,7 +7,7 @@ from omegaconf import DictConfig
 dotenv.load_dotenv(override=True)
 
 
-@hydra.main(config_path="configs/", config_name="train.yaml")
+@hydra.main(config_path="configs/", config_name="train.yaml", version_base=None)
 def main(config: DictConfig) -> None:
 
     # Imports can be nested inside @hydra.main to optimize tab completion
@@ -19,6 +19,7 @@ def main(config: DictConfig) -> None:
     utils.extras(config)
 
     # Train model
+    return
     return train(config)
 
 
