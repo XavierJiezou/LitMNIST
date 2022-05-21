@@ -9,6 +9,19 @@ from torchvision.transforms import transforms
 
 
 class MNISTDataModule(LightningDataModule):
+    """Example of LightningDataModule for MNIST dataset.
+    A DataModule implements 5 key methods:
+        - prepare_data (things to do on 1 GPU/TPU, not on every GPU/TPU in distributed mode)
+        - setup (things to do on every accelerator in distributed mode)
+        - train_dataloader (the training dataloader)
+        - val_dataloader (the validation dataloader(s))
+        - test_dataloader (the test dataloader(s))
+    This allows you to share a full dataset without explaining how to download,
+    split, transform and process the data.
+    Read the docs:
+        https://pytorch-lightning.readthedocs.io/en/latest/extensions/datamodules.html
+    """
+
     def __init__(
         self,
         data_dir: str = "data/",
@@ -20,10 +33,10 @@ class MNISTDataModule(LightningDataModule):
     ) -> None:
         super().__init__()
 
-        # This line allows to access init params with 'self.hparams' attribute
+        # this line allows to access init params with 'self.hparams' attribute
         self.save_hyperparameters()
 
-        # Data transformations
+        # data transformations
         self.transform = transforms.Compose(
             [
                 transforms.ToTensor(),
@@ -40,12 +53,23 @@ class MNISTDataModule(LightningDataModule):
         return 10
 
     def prepare_data(self) -> None:
+        """Download data if needed.
+
+        This method is called only from a single GPU.
+        Do not use it to assign state (self.x = y).
+        """
         mnist_dir = os.path.join(self.hparams.data_dir, "MNIST")
         _download = not os.path.exists(mnist_dir)
         MNIST(self.hparams.data_dir, train=True, download=_download)
         MNIST(self.hparams.data_dir, train=False, download=_download)
 
     def setup(self, stage: Any = None) -> None:
+        """Load data. Set variables: `self.data_train`, `self.data_val`, `self.data_test`.
+
+        This method is called by lightning when doing `trainer.fit()` and `trainer.test()`,
+        so be careful not to execute the random split twice! The `stage` can be used to
+        differentiate whether it's called before trainer.fit()` or `trainer.test()`.
+        """
         if stage in ("fit", "test", None):
             trainset = MNIST(
                 root=self.hparams.data_dir, train=True, transform=self.transform
