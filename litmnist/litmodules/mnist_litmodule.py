@@ -42,7 +42,7 @@ class MNISTLitModule(LightningModule):
 
     def validation_step(self, batch: Any, batch_idx: int) -> Any:
         _, loss, acc = self._step(batch)
-        self.log("val_loss", loss, prog_bar=True)
+        self.log("val_loss", loss, prog_bar=False)
         self.log("val_acc", acc, prog_bar=True)
 
     def test_step(self, batch: Any) -> Any:

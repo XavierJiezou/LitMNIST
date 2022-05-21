@@ -1,6 +1,7 @@
 # Log
 lightning_logs*/
 logs/
+checkpoints/
 
 # Jsub
 jsub/
