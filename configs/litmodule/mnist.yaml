@@ -1,4 +1,4 @@
-_target_: litmnist.litmodules.MNISTLitModule
+_target_: src.litmodules.MNISTLitModule
 defaults:
   - /model: simple_densenet.yaml
   - _self_

@@ -3,7 +3,7 @@ import os
 import pytest
 import torch
 
-from litmnist.datamodules import MNISTDataModule
+from src.datamodules import MNISTDataModule
 
 
 @pytest.mark.parametrize("batch_size", [32, 128])

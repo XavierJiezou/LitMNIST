@@ -1,4 +1,4 @@
-_target_: litmnist.models.SimpleDenseNet
+_target_: src.models.SimpleDenseNet
 channels: 1
 width: 28
 height: 28

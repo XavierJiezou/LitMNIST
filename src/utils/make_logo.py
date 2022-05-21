@@ -4,7 +4,7 @@ sys.path.append(".")
 
 from torchvision.utils import save_image
 
-from litmnist.datamodules import MNISTDataModule
+from src.datamodules import MNISTDataModule
 
 
 def make_logo(save_path: str) -> None:

@@ -1,6 +1,6 @@
 import fire
 
-from litmnist import __version__
+from src import __version__
 
 
 class LitMNISTCli:

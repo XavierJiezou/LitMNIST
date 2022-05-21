@@ -12,8 +12,8 @@ def main(config: DictConfig) -> None:
 
     # Imports can be nested inside @hydra.main to optimize tab completion
     # https://github.com/facebookresearch/hydra/issues/934
-    from litmnist import utils
-    from litmnist.training_pipeline import train
+    from src import utils
+    from src.training_pipeline import train
 
     # Applies optional utilities
     utils.extras(config)
