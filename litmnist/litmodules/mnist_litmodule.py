@@ -34,7 +34,7 @@ class MNISTLitModule(LightningModule):
         acc = accuracy(preds, y)
         return preds, loss, acc
 
-    def training_step(self, batch: Any) -> Any:
+    def training_step(self, batch: Any, batch_idx: int) -> Any:
         _, loss, acc = self._step(batch)
         self.log("train_loss", loss, on_step=False, on_epoch=True, prog_bar=False)
         self.log("train_acc", acc, on_step=False, on_epoch=True, prog_bar=True)
@@ -45,7 +45,7 @@ class MNISTLitModule(LightningModule):
         self.log("val_loss", loss, prog_bar=False)
         self.log("val_acc", acc, prog_bar=True)
 
-    def test_step(self, batch: Any) -> Any:
+    def test_step(self, batch: Any, batch_idx: int) -> Any:
         _, loss, acc = self._step(batch)
         metrics = {"test_loss": loss, "test_acc": acc}
         self.log_dict(metrics)
