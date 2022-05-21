@@ -6,6 +6,19 @@ from torchmetrics.functional import accuracy
 
 
 class MNISTLitModule(LightningModule):
+    """Example of LightningModule for MNIST classification.
+
+    A LightningModule organizes your PyTorch code into 5 sections:
+        - Computations (init).
+        - Train loop (training_step)
+        - Validation loop (validation_step)
+        - Test loop (test_step)
+        - Optimizers (configure_optimizers)
+
+    Read the docs:
+        https://pytorch-lightning.readthedocs.io/en/latest/common/lightning_module.html
+    """
+
     def __init__(
         self,
         model: torch.nn.Module,
@@ -38,6 +51,10 @@ class MNISTLitModule(LightningModule):
         _, loss, acc = self._step(batch)
         self.log("train_loss", loss, on_step=False, on_epoch=True, prog_bar=False)
         self.log("train_acc", acc, on_step=False, on_epoch=True, prog_bar=True)
+
+        # we can return here dict with any tensors
+        # and then read it in some callback or in `training_epoch_end()`
+        # remember to always return loss from `training_step()` or else backpropagation will fail!
         return loss
 
     def validation_step(self, batch: Any, batch_idx: int) -> Any:
@@ -51,6 +68,12 @@ class MNISTLitModule(LightningModule):
         self.log_dict(metrics)
 
     def configure_optimizers(self) -> torch.optim.Optimizer:
+        """Choose what optimizers and learning-rate schedulers to use in your optimization.
+        Normally you'd need one. But in the case of GANs or similar you might have multiple.
+
+        See examples here:
+            https://pytorch-lightning.readthedocs.io/en/latest/common/lightning_module.html#configure-optimizers
+        """
         return torch.optim.Adam(
             params=self.model.parameters(),
             lr=self.hparams.lr,
