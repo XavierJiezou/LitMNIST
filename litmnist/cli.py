@@ -1,9 +1,3 @@
-"""Ref
-https://pytorch-lightning.readthedocs.io/en/latest/cli/lightning_cli_intermediate.html#enable-the-lightning-cli
-https://pytorch-lightning.readthedocs.io/en/latest/cli/lightning_cli_intermediate_2.html
-"""
-
-
 import fire
 
 from litmnist import __version__
