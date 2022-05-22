@@ -26,8 +26,9 @@ torchmetrics="^0.8.2"
 comet-ml = "^3.31.0"
 fire = "^0.4.0"
 rich = "^12.3.0"
-hydra-core = "^1.1"
-wandb="^0.12.16"
+hydra-core = "^1.1.0"
+wandb = "^0.12.16"
+hydra-colorlog = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
 toml = "^0.10.2"
