@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "LitMNIST"
-version = "0.2.0"
+version = "0.1.0"
 description = "PyTorch Lightning demo on the MNIST dataset"
 authors = ["XavierJiezou <878972272@qq.com>"]
 maintainers = []
