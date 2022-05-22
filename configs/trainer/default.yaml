@@ -8,10 +8,10 @@ max_epochs: 10
 # sanity check runs n validation batches before starting the training routine
 # set it to `-1` to run all batches in all validation data loaders
 # default to 2
-num_sanity_val_steps: 0
+# num_sanity_val_steps: 0
 
 # precision
-precision: 16
+# precision: 16
 
 # ckpt path
 resume_from_checkpoint: null

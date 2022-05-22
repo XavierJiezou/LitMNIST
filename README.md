@@ -4,7 +4,7 @@
 
 # LitMNIST
 
-PyTorch Lightning demo on the MNIST dataset.
+PyTorch Lightning template on the MNIST dataset.
 
 <p>
     <a href="https://github.com/XavierJiezou/LitMNIST/actions?query=workflow:Release">
