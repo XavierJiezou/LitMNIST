@@ -97,7 +97,7 @@ Love the project? Please consider [donating](https://paypal.me/xavierjiezou?coun
 
 ## Demo
 
-![demo](https://cdn.jsdelivr.net/gh/XavierJiezou/LitMNIST@main/images/logo.png)
+![demo](https://fastly.jsdelivr.net/gh/XavierJiezou/LitMNIST@main/images/demo.png)
 
 ## Features
 
