@@ -29,7 +29,7 @@ class MNISTLitModule(LightningModule):
 
         # this line allows to access init params with 'self.hparams' attribute
         # it also ensures init params will be stored in ckpt
-        self.save_hyperparameters(logger=False)
+        self.save_hyperparameters(logger=False, ignore=["model"])
 
         self.model = model
 

@@ -1,65 +1,37 @@
-import os
-
 import gradio as gr
+import numpy as np
 import torch
-from PIL import Image
 from torchvision import transforms
 
-torch.hub.download_url_to_file(
-    "https://github.com/pytorch/hub/raw/master/images/dog.jpg", "dog.jpg"
-)
+from src.litmodules import MNISTLitModule
 
-model = torch.hub.load("pytorch/vision:v0.9.0", "alexnet", pretrained=True)
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
+model = MNISTLitModule.load_from_checkpoint("checkpoints/last.ckpt")
+model.to(device)
 model.eval()
 
-# Download ImageNet labels
-os.system(
-    "wget https://raw.githubusercontent.com/pytorch/hub/master/imagenet_classes.txt"
-)
 
-
-def inference(input_image: Image) -> dict:
-
+def inference(input_image: np.array) -> dict:
     preprocess = transforms.Compose(
         [
-            transforms.CenterCrop(28),
             transforms.ToTensor(),
-            transforms.Grayscale(1),
             transforms.Normalize(mean=(0.1307,), std=(0.3081,)),
         ]
     )
     input_tensor = preprocess(input_image)
-    input_batch = input_tensor.unsqueeze(0)
-    if torch.cuda.is_available():
-        input_batch = input_batch.to("cuda")
-        model.to("cuda")
+    input_batch = input_tensor.unsqueeze(0).to(device)
     with torch.no_grad():
         output = model(input_batch)
     probabilities = torch.nn.functional.softmax(output[0], dim=0)
-    with open("imagenet_classes.txt") as f:
-        categories = [s.strip() for s in f.readlines()]
-    top5_prob, top5_catid = torch.topk(probabilities, 5)
-    result = {}
-    for i in range(top5_prob.size(0)):
-        result[categories[top5_catid[i]]] = top5_prob[i].item()
-    return result
+    return {i: float(probabilities[i]) for i in range(len(probabilities))}
 
 
-inputs = gr.inputs.Image(type="pil")
-outputs = gr.outputs.Label(type="confidences", num_top_classes=5)
-
-title = "ALEXNET"
-description = "Gradio demo for Alexnet, the 2012 ImageNet winner."
-article = "One weird trick for parallelizing convolutional neural networks"
-
-examples = [["dog.jpg"]]
 gr.Interface(
     inference,
-    inputs,
-    outputs,
-    title=title,
-    description=description,
-    article=article,
-    examples=examples,
-    analytics_enabled=False,
+    inputs=gr.Image(
+        image_mode="L", source="canvas", shape=(28, 28), invert_colors=True
+    ),
+    outputs=gr.outputs.Label(type="confidences", num_top_classes=10),
+    live=False,
+    title="Handwritten Digit Recognition",
 ).launch()
