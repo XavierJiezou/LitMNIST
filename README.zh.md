@@ -8,7 +8,7 @@
 
 （以 MNIST 分类任务为例）
 
-点击 [<kbd>Use this template</kbd>](https://github.com/XavierJiezou/LitMNIST/generate) 即可使用改模板来初始化你的新仓库。
+点击 [<kbd>Use this template</kbd>](https://github.com/XavierJiezou/LitMNIST/generate) 即可使用该模板来初始化你的新仓库。
 
 <p>
     <a href="https://github.com/XavierJiezou/LitMNIST/actions?query=workflow:Release">
