@@ -4,7 +4,11 @@
 
 # LitMNIST
 
-PyTorch Lightning template on the MNIST dataset.
+基于 PyTorch Lightning + Hydra 的深度学习项目模板。
+
+（以 MNIST 分类任务为例）
+
+点击 [<kbd>Use this template</kbd>](https://github.com/XavierJiezou/LitMNIST/generate) 即可使用该模板来初始化你的新仓库。
 
 <p>
     <a href="https://github.com/XavierJiezou/LitMNIST/actions?query=workflow:Release">
@@ -95,34 +99,186 @@ Love the project? Please consider [donating](https://paypal.me/xavierjiezou?coun
 
 </div>
 
-## Demo
+## 演示
 
 ![demo](https://raw.githubusercontent.com/XavierJiezou/LitMNIST/main/images/demo.jpg)
 
-## Quickstart
+## 快速入门
+
+> 开始之前，你必须熟练使用 [PyTorch Lightning](https://www.pytorchlightning.ai/)，并对 [Hydra](https://hydra.cc/) 有一定的了解。
+
+1. 克隆仓库到本地
 
 ```bash
-# clone project
 git clone https://github.com/XavierJiezou/LitMNIST.git
 cd LitMNIST
+```
 
-# [OPTIONAL] create conda environment
+2. 创建 conda 虚拟环境
+
+```bash
 conda create -n myenv python=3.7
 conda activate myenv
+```
 
-# install pytorch according to instructions
-# https://pytorch.org/get-started/
+3. 根据官网教程安装 PyTorch
 
-# install requirements
+> [https://pytorch.org/get-started/](https://pytorch.org/get-started/)
+
+4. 安装项目依赖包
+
+```bash
 pip install -r requirements.txt
 ```
 
-## Usage
+## 用法
 
-### Train
+### 基础用法
+
+`train.py` 集成了模型的训练、验证及测试的一整套工作流。
 
 ```bash
-python train
+python train.py
+```
+
+### 进阶用法
+
+- 从命令行覆盖任何配置参数
+
+`train.py` 默认从 [configs/train.yaml](configs/train.yaml) 中获取参数。因此，你可以先修改 `yaml` 配置文件中的参数，然后再运行。
+
+当然，你也可以在命令行直接指定参数。命令行中参数的优先级要大于 `yaml` 配置文件中参数的优先级。
+
+```bash
+python train.py trainer.max_epochs=3
+```
+
+对于某些不太重要的参数，它们没有在 `train.yaml` 中定义，所以你在命令行中指定的时候必须添加 `+`，否则会报错。
+
+```bash
+python train.py +trainer.precision=16
+```
+
+- 在 CPU、GPU、多 GPU 和 TPU 上训练
+
+```bash
+# 在 CPU 上训练
+python train.py trainer.gpus=0
+
+# 在 GPU 上训练
+python train.py trainer.gpus=1
+
+# 在 TPU 上训练
+python train.py +trainer.tpu_cores=8
+
+# 基于 DDP（Distributed Data Parallel，分布式数据并行）的训练 [4 个 GPU]
+python train.py trainer.gpus=4 +trainer.strategy=ddp
+
+# 基于 DDP（Distributed Data Parallel，分布式数据并行）的训练 [8 个 GPU，两个节点]
+python train.py trainer.gpus=4 +trainer.num_nodes=2 +trainer.strategy=ddp
+```
+
+- 混合精度训练
+
+```bash
+# 使用 PyTorch 本机自动混合精度（AMP）训练
+python train.py trainer.gpus=1 +trainer.precision=16
+```
+
+- 使用 PyTorch Lightning 中的日志记录器来记录训练日志
+
+```bash
+# 在项目根目录下新建一个名为 `.env` 的文件，并添加一行形如 `WANDB_API_KEY="xxx"` 的文本
+python train.py logger=wandb
+```
+
+- 根据自定义实验配置来训练模型
+
+```bash
+# 你可以自定义 configs/experiment/example.yaml 中的配置
+python train.py experiment=example
+```
+
+- 带回调函数的训练
+
+```python
+python train.py callbacks=default
+```
+
+- 使用  Pytorch Lightning 中的策略
+
+梯度裁剪来避免梯度爆炸
+
+```bash
+python train.py +trainer.gradient_clip_val=0.5
+```
+
+随机加权平均可以使您的模型更好地泛化
+
+```bash
+python train.py +trainer.stochastic_weight_avg=true
+```
+
+梯度累计
+
+```bash
+python train.py +trainer.accumulate_grad_batches=10
+```
+
+- 轻松调试
+
+> 配置文件见 [configs/debug/](/configs/debug/)
+
+默认调试模式（运行 1 个 epoch）
+
+```bash
+python train.py debug=default
+```
+
+仅对 test epoch 进行调试
+
+```bash
+python train.py debug=test_only
+```
+
+运行一个 train，val 和 test 训练（仅使用 1 个 batch）
+
+```bash
+python train.py +trainer.fast_dev_run=true
+```
+
+训练完成后打印各个阶段的执行时间（用于快速发现训练瓶颈）
+
+```bash
+python train.py +trainer.profiler="simple"
+```
+
+- 断点续训
+
+```bash
+python train.py trainer.resume_from_checkpoint="/path/to/name.ckpt"
+```
+
+- 一次执行多个实验
+
+例如，下方代码将按顺序运行所有参数组合（共 6 个）的实验。
+
+```bash
+python train.py -m datamodule.batch_size=32,64,128 litmodule.lr=0.001,0.0005
+```
+
+此外，你也可以执行 [/configs/experiment/](/configs/experiment/) 文件夹中的的所有实验
+
+```bash
+python train.py -m 'experiment=glob(*)'
+```
+
+- 使用 Optuna 进行超参数搜索
+
+> 配置文件见 [configs/hparams_search/](/configs/hparams_search/)
+
+```bash
+python train.py -m hparams_search=mnist_optuna
 ```
 
 ### Test
@@ -139,40 +295,8 @@ See [CHANGELOG.md](/CHANGELOG.md)
 
 [MIT License](/License)
 
-## Dependencies
-
-### Production Dependencies
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=psf&repo=requests)](https://github.com/psf/requests)
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Textualize&repo=rich)](https://github.com/Textualize/rich)
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=google&repo=python-fire)](https://github.com/google/python-fire)
-
-### Development dependencies
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=python-poetry&repo=poetry)](https://github.com/python-poetry/poetry)
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=pytest-dev&repo=pytest)](https://github.com/pytest-dev/pytest)
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=pytest-dev&repo=pytest-cov)](https://github.com/pytest-dev/pytest-cov)
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=pre-commit&repo=pre-commit)](https://github.com/pre-commit/pre-commit)
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=PyCQA&repo=flake8)](https://github.com/PyCQA/flake8)
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=PyCQA&repo=pylint)](https://github.com/PyCQA/pylint)
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=psf&repo=black)](https://github.com/psf/black)
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=uiri&repo=toml)](https://github.com/uiri/toml)
-
-[![GitHub issues](https://img.shields.io/github/issues/XavierJiezou/LitMNIST)](https://github.com/XavierJiezou/LitMNIST/issues)
-[![GitHub license](https://img.shields.io/github/license/XavierJiezou/LitMNIST)](https://github.com/XavierJiezou/LitMNIST/blob/main/LICENSE)
-
 ## References
 
-- [Python dependency management and packaging made easy.](https://github.com/python-poetry/poetry)
-- [The lightweight PyTorch wrapper for high-performance AI research. Scale your models, not the boilerplate.](https://github.com/PyTorchLightning/pytorch-lightning)
-- [PyTorch Lightning + Hydra. A very user-friendly template for rapid and reproducible ML experimentation with best practices.](https://github.com/ashleve/lightning-hydra-template)
-- - [一文详解 PyTorch 中的交叉熵](https://zhuanlan.zhihu.com/p/369699003)
+This template refers to the following warehouses and makes some modifications
+
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=ashleve&repo=lightning-hydra-template)](https://github.com/ashleve/lightning-hydra-template)
