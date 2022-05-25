@@ -121,11 +121,7 @@ conda create -n myenv python=3.7
 conda activate myenv
 ```
 
-3. 根据官网教程安装 PyTorch
-
-> [https://pytorch.org/get-started/](https://pytorch.org/get-started/)
-
-4. 安装项目依赖包
+3. 安装项目依赖包（如需安装 GPU 版 PyTorch，请参考[官网安装教程](https://pytorch.org/get-started/)）
 
 ```bash
 pip install -r requirements.txt
