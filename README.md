@@ -82,11 +82,11 @@
 </p>
 
 <p>
-    <a href="#demo">View Demo</a>
+    <a href="#演示">观看演示</a>
     •
-    <a href="https://github.com/XavierJiezou/LitMNIST/issues/new">Report Bug</a>
+    <a href="https://github.com/XavierJiezou/LitMNIST/issues/new">报告错误</a>
     •
-    <a href="https://github.com/XavierJiezou/LitMNIST/issues/new">Request Feature</a>
+    <a href="https://github.com/XavierJiezou/LitMNIST/issues/new">功能需求</a>
 </p>
 
 <p>
@@ -95,7 +95,7 @@
     <a href="/docs/README.cn.md">简体中文</a>
 </p>
 
-Love the project? Please consider [donating](https://paypal.me/xavierjiezou?country.x=C2&locale.x=zh_XC) to help it improve!
+喜欢这个项目吗？请考虑捐赠（[微信](https://raw.githubusercontent.com/XavierJiezou/ys-dl/main/image/wechat.jpg) | [支付宝](https://raw.githubusercontent.com/XavierJiezou/ys-dl/main/image/alipay.jpg)），以帮助它改善！
 
 </div>
 
