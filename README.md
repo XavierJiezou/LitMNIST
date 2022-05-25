@@ -103,7 +103,7 @@
 
 ![demo](https://raw.githubusercontent.com/XavierJiezou/LitMNIST/main/images/demo.jpg)
 
-## 快速入门
+## 安装
 
 > 开始之前，你必须熟练使用 [PyTorch Lightning](https://www.pytorchlightning.ai/)，并对 [Hydra](https://hydra.cc/) 有一定的了解。
 
