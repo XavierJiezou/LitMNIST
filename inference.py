@@ -15,7 +15,6 @@ def inference(input_image: np.array) -> dict:
     preprocess = transforms.Compose(
         [
             transforms.ToTensor(),
-            transforms.Grayscale(1),
             transforms.Resize((28, 28)),
             transforms.Normalize(mean=(0.1307,), std=(0.3081,)),
         ]
@@ -32,7 +31,7 @@ gr.Interface(
     inference,
     inputs=gr.Image(
         image_mode="L", source="canvas", shape=(28, 28), invert_colors=True
-    ),  # inputs='pil'
+    ),
     outputs=gr.outputs.Label(type="confidences", num_top_classes=10),
     live=False,
     title="Handwritten Digit Recognition",
