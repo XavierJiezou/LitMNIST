@@ -127,56 +127,48 @@ conda activate myenv
 pip install -r requirements.txt
 ```
 
-## 指南
+## 结构
 
 项目的主要目录结构如下：
 
 ```bash
-├── configs
-│   ├── callbacks
-│   ├── datamodule
-│   ├── debug
-│   ├── experiment
-│   ├── hparams_search
-│   ├── local
-│   ├── log_dir
-│   ├── logger
-│   ├── model
-│   ├── trainer
+├── configs # 存放 Hydra 配置文件
+│   ├── callbacks # Callbacks 配置（例如 EarlyStopping、ModelCheckpoint 等）
+│   ├── datamodule # Datamodule 配置（例如 batch_size、num_workers 等）
+│   ├── debug # 调试配置
+│   ├── experiment # 实验配置
+│   ├── hparams_search # 超参数搜索配置
+│   ├── local # 本地配置（暂时可以忽略）
+│   ├── log_dir # 日志存放目录配置
+│   ├── logger # 日志配置
+│   ├── model # 模型配置
+│   ├── trainer # Trainer 配置
 │   │
-│   ├── test.yaml
-│   └── train.yaml
+│   ├── test.yaml # 测试的主要配置
+│   └── train.yaml # 训练的主要配置
 │
-├── data
+├── data # 存放项目数据
 │
-├── logs
+├── logs # 存放项目日志（Hydra 日志 和 PyTorch Lightning loggers 生成的日志）
 │
-├── notebooks
-│
-│
-│
-├── scripts
-│
-├── src
-│   ├── datamodules
-│   ├── models
-│   ├── utils
-│   ├── vendor
+├── src # 源代码
+│   ├── datamodules # LightningDataModule
+│   ├── models # 存放基于原生 PyTorch 框架编写的模型
+│   ├── litmodules # LightningModule
+│   ├── utils # 存放一些实用的脚本（例如数据预处理的脚本）
 │   │
-│   ├── testing_pipeline.py
-│   └── training_pipeline.py
+│   ├── testing_pipeline.py # 测试流水线
+│   └── training_pipeline.py # 训练流水线
 │
-├── tests
+├── tests # 单元测试
 │
-├── test.py
-├── train.py
+├── test.py # 开始测试
+├── train.py # 开始训练
 │
-├── .env.example
-├── .gitignore
-├── .pre-commit-config.yaml
-├── requirements.txt
-├── setup.cfg
-└── README.md
+├── .env # 存储私有环境变量（例如 wandb 的 API_KEY）【注意：该文件不受版本控制】
+├── .gitignore # 设置版本控制需要排除的文件或目录
+├── requirements.txt # 项目依赖环境
+└── README.md # 项目概述文档
 ```
 
 ## 用法
@@ -328,12 +320,6 @@ python train.py -m 'experiment=glob(*)'
 ```bash
 python train.py -m hparams_search=mnist_optuna
 ```
-
-### Test
-
-## Usage
-
-`$ litmnist`
 
 ## Changelog
 
