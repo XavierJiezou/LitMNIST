@@ -27,12 +27,13 @@ def inference(input_image: np.array) -> dict:
     return {i: float(probabilities[i]) for i in range(len(probabilities))}
 
 
-gr.Interface(
-    inference,
-    inputs=gr.Image(
-        image_mode="L", source="canvas", shape=(28, 28), invert_colors=True
-    ),
-    outputs=gr.outputs.Label(type="confidences", num_top_classes=10),
-    live=False,
-    title="Handwritten Digit Recognition",
-).launch()
+if __name__ == "__main__":
+    gr.Interface(
+        inference,
+        inputs=gr.Image(
+            image_mode="L", source="canvas", shape=(28, 28), invert_colors=True
+        ),
+        outputs=gr.outputs.Label(type="confidences", num_top_classes=10),
+        live=False,
+        title="Handwritten Digit Recognition",
+    ).launch()
