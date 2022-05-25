@@ -4,9 +4,9 @@
 
 # LitMNIST
 
-基于 PyTorch Lightning + Hydra 的深度学习项目模板。
+基于 [PyTorch Lightning](https://github.com/PyTorchLightning/pytorch-lightning) + [Hydra](https://github.com/facebookresearch/hydra) 的深度学习项目模板。
 
-*（以 MNIST 分类任务为例）*
+*（以 [MNIST](http://yann.lecun.com/exdb/mnist/) 分类任务为例）*
 
 点击 [<kbd>Use this template</kbd>](https://github.com/XavierJiezou/LitMNIST/generate) 即可使用该模板来初始化你的新仓库。
 
