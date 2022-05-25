@@ -6,7 +6,7 @@
 
 基于 PyTorch Lightning + Hydra 的深度学习项目模板。
 
-（以 MNIST 分类任务为例）
+*（以 MNIST 分类任务为例）*
 
 点击 [<kbd>Use this template</kbd>](https://github.com/XavierJiezou/LitMNIST/generate) 即可使用该模板来初始化你的新仓库。
 
@@ -125,6 +125,58 @@ conda activate myenv
 
 ```bash
 pip install -r requirements.txt
+```
+
+## 指南
+
+项目的主要目录结构如下：
+
+```bash
+├── configs
+│   ├── callbacks
+│   ├── datamodule
+│   ├── debug
+│   ├── experiment
+│   ├── hparams_search
+│   ├── local
+│   ├── log_dir
+│   ├── logger
+│   ├── model
+│   ├── trainer
+│   │
+│   ├── test.yaml
+│   └── train.yaml
+│
+├── data
+│
+├── logs
+│
+├── notebooks
+│
+│
+│
+├── scripts
+│
+├── src
+│   ├── datamodules
+│   ├── models
+│   ├── utils
+│   ├── vendor
+│   │
+│   ├── testing_pipeline.py
+│   └── training_pipeline.py
+│
+├── tests
+│
+├── test.py
+├── train.py
+│
+├── .env.example
+├── .gitignore
+├── .pre-commit-config.yaml
+├── requirements.txt
+├── setup.cfg
+└── README.md
 ```
 
 ## 用法
@@ -293,6 +345,6 @@ See [CHANGELOG.md](/CHANGELOG.md)
 
 ## References
 
-This template refers to the following warehouses and makes some modifications
+This template refers to the following warehouses and makes some modifications.
 
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=ashleve&repo=lightning-hydra-template)](https://github.com/ashleve/lightning-hydra-template)
