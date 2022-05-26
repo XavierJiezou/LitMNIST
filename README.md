@@ -99,6 +99,22 @@
 
 </div>
 
+## 目录
+
+- [LitMNIST](#litmnist)
+  - [目录](#目录)
+  - [演示](#演示)
+  - [安装](#安装)
+  - [运行](#运行)
+  - [结构](#结构)
+  - [用法](#用法)
+    - [基础](#基础)
+    - [进阶](#进阶)
+  - [提示](#提示)
+  - [更新](#更新)
+  - [证书](#证书)
+  - [参考](#参考)
+
 ## 演示
 
 ![demo](https://raw.githubusercontent.com/XavierJiezou/LitMNIST/main/images/demo.jpg)
@@ -439,7 +455,7 @@ python train.py logger=comet
 
 - 使用 [torchmetrics](https://github.com/PytorchLightning/metrics) 计算指标
 
-推荐使用 PytorchLightning 官方提供的 [torchmetrics](https://github.com/PytorchLightning/metrics) 库来计算指标（像准确率，F1 score 和混淆矩阵等）。这对于多 GPU 训练尤为重要！并且，推荐对每个步骤使用不同的指标实例，以确保所有 GPU 进程都有正确的累积值。下面给出了一个简单实例。
+推荐使用 PytorchLightning 官方提供的 [torchmetrics](https://github.com/PytorchLightning/metrics) 库来计算指标（像准确率，F1 score 和混淆矩阵等）。这对于多 GPU 训练尤为重要！并且，推荐对每个步骤使用不同的指标实例，以确保所有 GPU 进程都有正确的累积值。下面给出了一个简单示例。
 
 ```python
 from torchmetrics.classification.accuracy import Accuracy
