@@ -481,7 +481,7 @@ class LitModel(LightningModule):
         ...
 ```
 
-- 可以使用 DVC 对数据和模型这些大文件进行版本控制
+- 可以使用 [DVC](https://github.com/iterative/dvc) 对数据和模型这些大文件进行版本控制
 
 ```bash
 dvc init
