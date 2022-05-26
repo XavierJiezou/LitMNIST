@@ -1,5 +1,0 @@
-outs:
-- md5: 5218c700acf817493d9ffc3f1161e32d.dir
-  size: 121986944
-  nfiles: 10
-  path: MNIST
