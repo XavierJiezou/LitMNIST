@@ -8,7 +8,7 @@ class SimpleDenseNet(nn.Module):
         width: int = 28,
         height: int = 28,
         hidden_size: int = 256,
-        hidden_layers: int = 3,
+        hidden_layers: int = 1,
         num_classes: int = 10,
     ) -> None:
         super().__init__()
