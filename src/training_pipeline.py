@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 import hydra
 from omegaconf import DictConfig
@@ -48,7 +49,7 @@ def train(config: DictConfig) -> float:
     litmodule: LightningModule = hydra.utils.instantiate(config.litmodule)
 
     # Init lightning callbacks
-    callbacks: list[Callback] = []
+    callbacks: List[Callback] = []
     if "callbacks" in config:
         for _, cb_conf in config.callbacks.items():
             if "_target_" in cb_conf:
@@ -56,7 +57,7 @@ def train(config: DictConfig) -> float:
                 callbacks.append(hydra.utils.instantiate(cb_conf))
 
     # Init lightning loggers
-    logger: list[LightningLoggerBase] = []
+    logger: List[LightningLoggerBase] = []
     if "logger" in config:
         for _, lg_conf in config.logger.items():
             if "_target_" in lg_conf:

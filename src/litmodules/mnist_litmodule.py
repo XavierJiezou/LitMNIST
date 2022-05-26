@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Tuple
 
 import torch
 from pytorch_lightning import LightningModule
@@ -39,7 +39,7 @@ class MNISTLitModule(LightningModule):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.model(x)
 
-    def _step(self, batch: Any) -> tuple[Any]:
+    def _step(self, batch: Any) -> Tuple[Any]:
         x, y = batch
         out = self.model(x)
         preds = out.argmax(1)
