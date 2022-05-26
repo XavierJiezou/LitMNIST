@@ -90,7 +90,7 @@
 </p>
 
 <p>
-    <a href="/docs/README.en.md">English </a>
+    <a href="https://github.com/ashleve/lightning-hydra-template">English </a>
     •
     <a href="/docs/README.cn.md">简体中文</a>
 </p>
@@ -104,17 +104,19 @@
 <details>
 <summary>LitMNIST</summary>
 
-- [演示](#演示)
-- [安装](#安装)
-- [运行](#运行)
-- [结构](#结构)
-- [用法](#用法)
+- [LitMNIST](#litmnist)
+  - [目录](#目录)
+  - [演示](#演示)
+  - [安装](#安装)
+  - [运行](#运行)
+  - [结构](#结构)
+  - [用法](#用法)
     - [基础](#基础)
     - [进阶](#进阶)
-- [提示](#提示)
-- [更新](#更新)
-- [证书](#证书)
-- [参考](#参考)
+  - [提示](#提示)
+  - [更新](#更新)
+  - [证书](#证书)
+  - [参考](#参考)
 </details>
 
 ## 演示
