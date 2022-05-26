@@ -181,10 +181,10 @@ python train.py
 
 本仓库是一个基于 [PyTorch Lightning](https://github.com/PyTorchLightning/pytorch-lightning) + [Hydra](https://github.com/facebookresearch/hydra) 的深度学习项目模板。因此，你仅需要套用改模板，并作出如下修改：
 
-1. 编写你自己的 PyTorch `nn.Module` 模型（参见 [src/models/simple_densenet.py](/src/models/simple_densenet.py）
-2. 编写你自己的 PyTorch Lightning `LightningModule`（参见 [src/litmodules/mnist_litmodule.py](/src/litmodules/mnist_litmodule.py）
-3. 编写你自己的 PyTorch Lightning `LightningDataModule`（参见 [src/datamodules/mnist_datamodule.py](/src/datamodules/mnist_datamodule.py）
-4. 编写你自己的实验配置文件（参见 [configs/experiment/example.yaml](/configs/experiment/example.yaml）
+1. 编写你自己的 PyTorch `nn.Module` 模型（参见 [src/models/simple_densenet.py](/src/models/simple_densenet.py)）
+2. 编写你自己的 PyTorch Lightning `LightningModule`（参见 [src/litmodules/mnist_litmodule.py](/src/litmodules/mnist_litmodule.py)）
+3. 编写你自己的 PyTorch Lightning `LightningDataModule`（参见 [src/datamodules/mnist_datamodule.py](/src/datamodules/mnist_datamodule.py)）
+4. 编写你自己的实验配置文件（参见 [configs/experiment/example.yaml](/configs/experiment/example.yaml)）
 5. 使用选定的实验配置运行训练代码：`python train.py experiment=<EXPERIMENT_NAME>`
 
 ### 基础
