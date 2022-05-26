@@ -249,7 +249,7 @@ python train.py +trainer.tpu_cores=8
 python train.py trainer.gpus=4 +trainer.strategy=ddp
 ```
 
-基于 DDP（Distributed Data Parallel，分布式数据并行）的训练。【8 个 GPU，两个节点】
+基于 DDP（Distributed Data Parallel，分布式数据并行）的训练【8 个 GPU，两个节点】
 
 ```bash
 python train.py trainer.gpus=4 +trainer.num_nodes=2 +trainer.strategy=ddp
