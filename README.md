@@ -307,7 +307,7 @@ python train.py experiment=example
 
 - 带回调函数的训练
 
-> 配置文件见 [configs/callbacks/](/configs/callbacks/
+> 配置文件见 [configs/callbacks/](/configs/callbacks/)
 
 ```python
 python train.py callbacks=default
