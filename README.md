@@ -147,8 +147,21 @@ pip install -r requirements.txt
 
 ## 运行
 
+### CPU
+
 ```bash
 python train.py
+```
+
+### GPU
+
+```bash
+python train.py \
+trainer.gpus=4 \
++trainer.strategy=ddp_find_unused_parameters_false \
+datamodule.num_workers=16 \
+datamodule.pin_memory=True \
+datamodule.persistent_workers=True
 ```
 
 ## 结构
@@ -275,7 +288,7 @@ python train.py trainer.gpus=4 +trainer.num_nodes=2 +trainer.strategy=ddp
 
 - 混合精度训练
 
-> PyTorch Lightning 允许你使用半精度或混合精度以减少训练期间的内存占用。（在 GPU 上能够实现 3 倍的加速效果）
+> PyTorch Lightning 允许你使用半精度或混合精度以减少训练期间的内存占用。（在 GPU 上能够实现 3 倍的加速效果，但可能损失精度）
 
 ```bash
 python train.py trainer.gpus=1 +trainer.precision=16
