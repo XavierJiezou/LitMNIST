@@ -40,8 +40,8 @@ def test(config: DictConfig) -> None:
     datamodule: LightningDataModule = hydra.utils.instantiate(config.datamodule)
 
     # Init lightning model
-    log.info(f"Instantiating model <{config.model._target_}>")
-    model: LightningModule = hydra.utils.instantiate(config.model)
+    log.info(f"Instantiating model <{config.litmodule._target_}>")
+    litmodule: LightningModule = hydra.utils.instantiate(config.litmodule)
 
     # Init lightning loggers List[LightningLoggerBase]
     logger = []
@@ -60,4 +60,4 @@ def test(config: DictConfig) -> None:
         trainer.logger.log_hyperparams({"ckpt_path": config.ckpt_path})
 
     log.info("Starting testing!")
-    trainer.test(model=model, datamodule=datamodule, ckpt_path=config.ckpt_path)
+    trainer.test(model=litmodule, datamodule=datamodule, ckpt_path=config.ckpt_path)
