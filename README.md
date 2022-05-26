@@ -101,6 +101,9 @@
 
 ## 目录
 
+<details>
+<summary>LitMNIST</summary>
+
 - [LitMNIST](#litmnist)
   - [目录](#目录)
   - [演示](#演示)
@@ -114,6 +117,7 @@
   - [更新](#更新)
   - [证书](#证书)
   - [参考](#参考)
+</details>
 
 ## 演示
 
