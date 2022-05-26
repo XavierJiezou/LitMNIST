@@ -135,7 +135,7 @@ cd LitMNIST
 2. 创建并激活 conda 虚拟环境
 
 ```bash
-conda create -n myenv python=3.7
+conda create -n myenv python=3.8
 conda activate myenv
 ```
 
